@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Infinite-Canvas WebView Manager Demo</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="toolbar">
+    <div class="toolbar__left">
+      <button id="add-btn" class="button">Add WebView</button>
+      <input id="url-input" class="input" type="text" placeholder="https://example.com" />
+    </div>
+    <div class="toolbar__right">
+      <span class="hint">Space + Drag = Pan · Ctrl + Wheel = Zoom</span>
+    </div>
+  </header>
+
+  <main class="viewport" id="viewport">
+    <div class="canvas" id="canvas">
+      <!-- Widgets are injected here -->
+    </div>
+  </main>
+
+  <script type="module" src="app.ts"></script>
+</body>
+</html>

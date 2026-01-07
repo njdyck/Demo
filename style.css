@@ -1,0 +1,146 @@
+:root {
+  color-scheme: light;
+  font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+  background: #f4f6fb;
+  color: #1f2430;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #f4f6fb;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  background: #ffffff;
+  border-bottom: 1px solid #e1e6f0;
+  box-shadow: 0 2px 6px rgba(20, 24, 40, 0.08);
+  z-index: 2;
+}
+
+.toolbar__left {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.toolbar__right {
+  color: #687087;
+  font-size: 0.9rem;
+}
+
+.button {
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: none;
+  background: #2c62ff;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 6px 14px rgba(44, 98, 255, 0.24);
+}
+
+.button:hover {
+  background: #1d4ef0;
+}
+
+.input {
+  min-width: 260px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #d6dbe8;
+  background: #fdfdff;
+  box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.06);
+}
+
+.viewport {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+  background: radial-gradient(circle at top, #ffffff, #eef2fb 60%);
+  cursor: default;
+}
+
+.viewport--panning {
+  cursor: grab;
+}
+
+.canvas {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform-origin: 0 0;
+  width: 0;
+  height: 0;
+}
+
+.widget {
+  position: absolute;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.18);
+  border: 1px solid rgba(34, 43, 64, 0.12);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.titlebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: linear-gradient(135deg, #f0f3ff, #e4ebff);
+  cursor: grab;
+}
+
+.titlebar__title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #1c2754;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.titlebar__close {
+  border: none;
+  background: transparent;
+  font-size: 1.1rem;
+  cursor: pointer;
+  color: #50608f;
+}
+
+.titlebar__close:hover {
+  color: #e24040;
+}
+
+.widget__body {
+  flex: 1;
+  padding: 16px;
+  background: #fbfcff;
+  color: #7a8297;
+  font-size: 0.85rem;
+}
+
+.resize {
+  width: 18px;
+  height: 18px;
+  align-self: flex-end;
+  cursor: nwse-resize;
+  background: linear-gradient(135deg, transparent 50%, rgba(120, 133, 181, 0.35) 50%);
+}
+
+.hint {
+  font-weight: 500;
+}

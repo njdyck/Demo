@@ -1,21 +1,27 @@
 // Demo: Infinite-Canvas WebView Manager (simuliert)
 // - Kein echtes WebView oder iframe
 // - Widgets sind DOM-Elemente, die native Fenster imitieren
+// - Hinweis: Die Datei ist als JS geschrieben, damit der Browser sie direkt laden kann.
 
-type Widget = {
-  id: string;
-  title: string;
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  scale: number;
-};
+/**
+ * @typedef {Object} Widget
+ * @property {string} id
+ * @property {string} title
+ * @property {number} x
+ * @property {number} y
+ * @property {number} width
+ * @property {number} height
+ * @property {number} scale
+ */
 
-const viewport = document.querySelector<HTMLDivElement>("#viewport");
-const canvas = document.querySelector<HTMLDivElement>("#canvas");
-const addBtn = document.querySelector<HTMLButtonElement>("#add-btn");
-const urlInput = document.querySelector<HTMLInputElement>("#url-input");
+/** @type {HTMLDivElement | null} */
+const viewport = document.querySelector("#viewport");
+/** @type {HTMLDivElement | null} */
+const canvas = document.querySelector("#canvas");
+/** @type {HTMLButtonElement | null} */
+const addBtn = document.querySelector("#add-btn");
+/** @type {HTMLInputElement | null} */
+const urlInput = document.querySelector("#url-input");
 
 if (!viewport || !canvas || !addBtn || !urlInput) {
   throw new Error("Missing required DOM elements.");
@@ -28,33 +34,36 @@ const viewState = {
   scale: 1,
 };
 
-const widgets = new Map<string, Widget>();
+/** @type {Map<string, Widget>} */
+const widgets = new Map();
 
 let isPanning = false;
 let panStart = { x: 0, y: 0 };
 let viewStart = { x: 0, y: 0 };
 
 let isDraggingWidget = false;
-let dragWidgetId: string | null = null;
+/** @type {string | null} */
+let dragWidgetId = null;
 let dragStartWorld = { x: 0, y: 0 };
 let dragWidgetStart = { x: 0, y: 0 };
 
 let isResizingWidget = false;
-let resizeWidgetId: string | null = null;
+/** @type {string | null} */
+let resizeWidgetId = null;
 let resizeStartWorld = { x: 0, y: 0 };
 let resizeWidgetStart = { w: 0, h: 0 };
 
 // -----------------------------------------
 // Koordinatentransformation
 // -----------------------------------------
-function worldToScreen(x: number, y: number) {
+function worldToScreen(x, y) {
   return {
     x: x * viewState.scale + viewState.panX,
     y: y * viewState.scale + viewState.panY,
   };
 }
 
-function screenToWorld(x: number, y: number) {
+function screenToWorld(x, y) {
   return {
     x: (x - viewState.panX) / viewState.scale,
     y: (y - viewState.panY) / viewState.scale,
@@ -73,13 +82,7 @@ function applyCanvasTransform() {
 // -----------------------------------------
 // Simulierte Kommunikation mit Rust
 // -----------------------------------------
-async function updateNativeWebviewGeometry(
-  widget: Widget,
-  screenX: number,
-  screenY: number,
-  screenW: number,
-  screenH: number
-) {
+async function updateNativeWebviewGeometry(widget, screenX, screenY, screenW, screenH) {
   console.log("Simulated Rust invoke:", widget.id, {
     screenX,
     screenY,
@@ -91,7 +94,7 @@ async function updateNativeWebviewGeometry(
 // -----------------------------------------
 // Widget Rendering & Geometrie
 // -----------------------------------------
-function createWidgetElement(widget: Widget) {
+function createWidgetElement(widget) {
   const el = document.createElement("div");
   el.className = "widget";
   el.dataset.id = widget.id;
@@ -138,7 +141,7 @@ function createWidgetElement(widget: Widget) {
     dragStartWorld = { x: worldPos.x, y: worldPos.y };
     dragWidgetStart = { x: widgetData.x, y: widgetData.y };
 
-    (event.target as HTMLElement).setPointerCapture(event.pointerId);
+    event.target.setPointerCapture(event.pointerId);
   });
 
   // Close-Handler
@@ -165,14 +168,14 @@ function createWidgetElement(widget: Widget) {
     resizeStartWorld = { x: worldPos.x, y: worldPos.y };
     resizeWidgetStart = { w: widgetData.width, h: widgetData.height };
 
-    (event.target as HTMLElement).setPointerCapture(event.pointerId);
+    event.target.setPointerCapture(event.pointerId);
   });
 
   return el;
 }
 
-function syncWidgetGeometry(widget: Widget) {
-  const el = canvas.querySelector<HTMLDivElement>(`.widget[data-id="${widget.id}"]`);
+function syncWidgetGeometry(widget) {
+  const el = canvas.querySelector(`.widget[data-id="${widget.id}"]`);
   if (!el) return;
 
   // World-Space -> Canvas DOM
@@ -190,9 +193,9 @@ function syncWidgetGeometry(widget: Widget) {
   updateNativeWebviewGeometry(widget, screenPos.x, screenPos.y, screenW, screenH);
 }
 
-function addWidget(url: string) {
+function addWidget(url) {
   const id = `widget-${crypto.randomUUID()}`;
-  const widget: Widget = {
+  const widget = {
     id,
     title: url || "https://example.com",
     x: Math.round(Math.random() * 800 - 400),
@@ -261,7 +264,7 @@ window.addEventListener("pointerup", () => {
 
 // Pan: Space + Drag auf leeren Bereich
 viewport.addEventListener("pointerdown", (event) => {
-  const target = event.target as HTMLElement;
+  const target = event.target;
   if (target.closest(".widget")) {
     return;
   }
